@@ -29,7 +29,7 @@ class Cell
     end
 
 
-    def render(reveal_ship = false)
+    def render
         if !fired_upon?
             "."
             # ”.” if the cell has not been fired upon.
