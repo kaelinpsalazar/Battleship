@@ -8,10 +8,11 @@ class Cell
         @ship = nil
         @fired_upon = false
        
+       
     end
 
     def empty?
-        !@ship
+        @ship.nil?
     end
 
     def place_ship(ship)
@@ -25,6 +26,25 @@ class Cell
     def fire_upon
         @fired_upon = true
         @ship.hit if !@empty
+    end
+
+    def render(reveal_ship = false)
+        if !fired_upon?
+            "."
+            # ”.” if the cell has not been fired upon.
+        elsif empty?
+            "M"
+          # “M” if the cell has been fired upon and it does not contain a ship (the shot was a miss).
+        elsif @ship.sunk?
+            "X"
+            # “X” if the cell has been fired upon and its ship has been sunk.
+        
+            # # Additionally, we will include an optional boolean argument to indicate if we want to reveal a ship in the cell even if it has not been fired upon. This should render a cell that has not been fired upon and contains a ship as an “S”. This will be useful for showing the user where they placed their ships and for debugging.
+        else
+            "H"
+            # “H” if the cell has been fired upon and it contains a ship (the shot was a hit).
+        end
+
     end
 
 

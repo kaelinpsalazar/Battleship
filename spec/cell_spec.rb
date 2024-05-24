@@ -3,7 +3,10 @@ require 'spec_helper'
 RSpec.describe Cell do
     before(:each) do
         @cell = Cell.new("B4")
+        @cell_1 = Cell.new("B4")
+        @cell_2 = Cell.new("C3")
         @cruiser = Ship.new("Cruiser", 3)
+
     end
 
 
@@ -39,4 +42,19 @@ RSpec.describe Cell do
             expect(@cell.fired_upon?).to eq(false)
         end
     end
+
+    describe 'render' do
+        it 'populates cell' do
+        expect(@cell_1.render).to eq(".")
+        end
+          
+    end
 end
+
+#Finally, a Cell will have a method called render which returns a String representation of the Cell for when we need to print the board. A cell can potentially be rendered as:
+
+# ”.” if the cell has not been fired upon.
+# “M” if the cell has been fired upon and it does not contain a ship (the shot was a miss).
+# “H” if the cell has been fired upon and it contains a ship (the shot was a hit).
+# “X” if the cell has been fired upon and its ship has been sunk.
+# Additionally, we will include an optional boolean argument to indicate if we want to reveal a ship in the cell even if it has not been fired upon. This should render a cell that has not been fired upon and contains a ship as an “S”. This will be useful for showing the user where they placed their ships and for debugging.
