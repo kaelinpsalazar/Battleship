@@ -11,6 +11,7 @@ RSpec.describe Cell do
         it "creates a cell with a coordinate" do
             expect(@cell.coordinate).to eq("B4")
             expect(@cell.ship).to eq(nil)
+            expect(@cell.fired_upon?).to be false
            
         end
     end
@@ -30,6 +31,12 @@ RSpec.describe Cell do
 
         @cell.place_ship(@cruiser)
         expect(@cell.ship).to eq(@cruiser)
+        end
+    end
+
+    describe 'fired_upon' do
+        it "hits ship if it is there" do
+            expect(@cell.fired_upon?).to eq(false)
         end
     end
 end
