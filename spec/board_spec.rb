@@ -3,6 +3,8 @@ require 'spec_helper'
 RSpec.describe Board do
   before(:each) do
     @board = Board.new
+    @cruiser = Ship.new("Cruiser", 3)
+    @submarine = Ship.new("Submarine", 2)
   end
   
   describe "initialize" do
@@ -14,88 +16,104 @@ RSpec.describe Board do
 
   describe "valid_coordinate?" do
     it "validates coordinate selection" do
-      expect(@board.valid_coordinate("A1")).to eq(true)
+      expect(@board.valid_coordinate?("A1")).to eq(true)
       # pry(main)> board.valid_coordinate?("A1")
       # # => true
 
-      expect(@board.valid_coordinate("D4")).to eq(true)
+      expect(@board.valid_coordinate?("D4")).to eq(true)
       # pry(main)> board.valid_coordinate?("D4")
       # # => true
       
-      expect(@board.valid_coordinate("A5")).to eq(false)
+      expect(@board.valid_coordinate?("A5")).to eq(false)
       # pry(main)> board.valid_coordinate?("A5")
       # # => false
       
-      expect(@board.valid_coordinate("E1")).to eq(false)
+      expect(@board.valid_coordinate?("E1")).to eq(false)
       # pry(main)> board.valid_coordinate?("E1")
       # # => false
       
-      expect(@board.valid_coordinate("A22")).to eq(false)
+      expect(@board.valid_coordinate?("A22")).to eq(false)
       # pry(main)> board.valid_coordinate?("A22")
       # # => false
     end
 
+    describe "validate_placement" do
+      it "validates ship placement on board" do
+        
+        # Testing the #cells method is a bit tricky because the Cell objects 
+        # are created in the Board class and not in our tests. We can’t specify 
+        # exactly what the return value should be because we don’t have reference 
+        # to the exact cell objects we expect in the hash. Instead, we can assert what 
+        # we do know about this hash. It’s a hash, it should have 16 key/value pairs, 
+        # and those keys point to cell objects.
+        
+        # Validating Placements
+        # Additionally, a Board should be able to tell us if a placement for a ship is 
+        # valid or not. Our Board should have a method called valid_placement? that takes 
+        # two arguments: a Ship object and an array of Coordinates.
+        
+        # There are many things we need to check for validating ship placement. Let’s use this setup:
+        
+
+        # First, the number of coordinates in the array should be the same as the length of the ship:
+
+        describe "coordinates given match ship length" do
+          expect(@board.valid_placement?(@cruiser, ["A1", "A2"])).to eq(false)
+          # pry(main)> board.valid_placement?(cruiser, ["A1", "A2"])
+          # # => false
+          
+          expect(@board.valid_placement?(@submarine, ["A2", "A3", "A4"])).to eq(false)
+          # pry(main)> board.valid_placement?(submarine, ["A2", "A3", "A4"])
+          # # => false
+        end
+
+        describe "coordinates passed are consecutive on board" do
+          expect(@board.valid_placement?(@cruiser, ["A1", "A2", "A4"])).to eq(false)
+          # pry(main)> board.valid_placement?(cruiser, ["A1", "A2", "A4"])
+          # # => false
+          
+          expect(@board.valid_placement?(@submarine, ["A1", "C1"])).to eq(false)
+          # pry(main)> board.valid_placement?(submarine, ["A1", "C1"])
+          # # => false
+        end
+
+        describe "coordinates must be selected in order" do
+          expect(@board.valid_placement?(@cruiser, ["A3", "A2", "A1"])).to eq(false)
+          # pry(main)> board.valid_placement?(cruiser, ["A3", "A2", "A1"])
+          # # => false
+        
+          expect(@board.valid_placement?(@submarine, ["C1", "B1"])).to eq(false)
+          # pry(main)> board.valid_placement?(submarine, ["C1", "B1"])
+          # # => false
+        end
+
+        describe "coordinates cannot be diagonally oriented" do
+          ### COORDINATES CANNOT BE DIAGONAL (MUST BE EITHER HORIZONTAL OR VERTICAL)
+          expect(@board.valid_placement?(@cruiser, ["A1", "B2", "C3"])).to eq(false)
+          # pry(main)> board.valid_placement?(cruiser, ["A1", "B2", "C3"])
+          # # => false
+          
+          expect(@board.valid_placement?(@submarine, ["C2", "D3"])).to eq(false)
+          # pry(main)> board.valid_placement?(submarine, ["C2", "D3"])
+          # # => false
+        end
+
+        describe "board can place ships with valid coordinates" do
+          # If all the previous checks pass then the placement should be valid:
+          expect(@board.valid_placement?(@submarine, ["A1", "A2"])).to eq(true)
+          # pry(main)> board.valid_placement?(submarine, ["A1", "A2"])
+          # # => true
+          
+          expect(@board.valid_placement?(@cruiser, ["B1", "C1", "D1"])).to eq(true)
+          # pry(main)> board.valid_placement?(cruiser, ["B1", "C1", "D1"])
+          # # => true
+        end
+      end
+    end
   end
 
 
 end
-
-# Testing the #cells method is a bit tricky because the Cell objects are created in the Board class and not in our tests. We can’t specify exactly what the return value should be because we don’t have reference to the exact cell objects we expect in the hash. Instead, we can assert what we do know about this hash. It’s a hash, it should have 16 key/value pairs, and those keys point to cell objects.
-
-# Validating Placements
-# Additionally, a Board should be able to tell us if a placement for a ship is valid or not. Our Board should have a method called valid_placement? that takes two arguments: a Ship object and an array of Coordinates.
-
-# There are many things we need to check for validating ship placement. Let’s use this setup:
-
-# pry(main)> require './lib/board'
-# # => true
-
-# pry(main)> require './lib/ship'
-# # => true
-
-# pry(main)> board = Board.new
-# # => #<Board:0x00007fcb0d9db478...>
-
-# pry(main)> cruiser = Ship.new("Cruiser", 3)
-# # => #<Ship:0x00007fcb0d989510...>
-
-# pry(main)> submarine = Ship.new("Submarine", 2)    
-# # => #<Ship:0x00007fcb0e8402c0...>
-# First, the number of coordinates in the array should be the same as the length of the ship:
-
-# pry(main)> board.valid_placement?(cruiser, ["A1", "A2"])
-# # => false
-
-# pry(main)> board.valid_placement?(submarine, ["A2", "A3", "A4"])
-# # => false
-# Next, make sure the coordinates are consecutive:
-
-# pry(main)> board.valid_placement?(cruiser, ["A1", "A2", "A4"])
-# # => false
-
-# pry(main)> board.valid_placement?(submarine, ["A1", "C1"])
-# # => false
-
-# pry(main)> board.valid_placement?(cruiser, ["A3", "A2", "A1"])
-# # => false
-
-# pry(main)> board.valid_placement?(submarine, ["C1", "B1"])
-# # => false
-# Finally, coordinates can’t be diagonal:
-
-# pry(main)> board.valid_placement?(cruiser, ["A1", "B2", "C3"])
-# # => false
-
-# pry(main)> board.valid_placement?(submarine, ["C2", "D3"])
-# # => false
-# If all the previous checks pass then the placement should be valid:
-
-# pry(main)> board.valid_placement?(submarine, ["A1", "A2"])
-# # => true
-
-# pry(main)> board.valid_placement?(cruiser, ["B1", "C1", "D1"])
-# # => true
-# Note that all of the different cases listed above should be their own tests. This will help you break this problem down into small steps and working on them one at a time. You should not have one big test for validating placement.
 
 # Tools for validation
 # There are many ways to go about the validation. Here are some ideas to help you get started:
