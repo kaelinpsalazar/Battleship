@@ -33,6 +33,10 @@ class Cell
         if !fired_upon?
             "."
             # ”.” if the cell has not been fired upon.
+
+        # elsif !fire_upon? && !empty?
+        #     "S"
+
         elsif empty?
             "M"
           # “M” if the cell has been fired upon and it does not contain a ship (the shot was a miss).
