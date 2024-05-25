@@ -22,11 +22,25 @@ class Board
       }
     end
 
-    def valid_coordinate(coordinate)
+    def valid_coordinate?(coordinate)
       @cells.has_key?(coordinate)
       
     end
   
+    def valid_placement?(ship, placement)
+      # 1. Ensure individual coordinates are valid with #valid_coordinate? (on board)
+      # 2. Ensure # of coordinates passed match ship length
+      # 3. Ensure coordinates passed via `placement` are consecutive
+      # 4. Ensure coordinates get passed in alphanumeric order
+      # 5. Ensure coordinates passed are NOT diagonally oriented
 
+      
+
+      # if ship.length == placement.length
+      #   return true
+      # else 
+      #   false
+      # end
+    end
     
 end

@@ -16,23 +16,23 @@ RSpec.describe Board do
 
   describe "valid_coordinate?" do
     it "validates coordinate selection" do
-      expect(@board.valid_coordinate("A1")).to eq(true)
+      expect(@board.valid_coordinate?("A1")).to eq(true)
       # pry(main)> board.valid_coordinate?("A1")
       # # => true
 
-      expect(@board.valid_coordinate("D4")).to eq(true)
+      expect(@board.valid_coordinate?("D4")).to eq(true)
       # pry(main)> board.valid_coordinate?("D4")
       # # => true
       
-      expect(@board.valid_coordinate("A5")).to eq(false)
+      expect(@board.valid_coordinate?("A5")).to eq(false)
       # pry(main)> board.valid_coordinate?("A5")
       # # => false
       
-      expect(@board.valid_coordinate("E1")).to eq(false)
+      expect(@board.valid_coordinate?("E1")).to eq(false)
       # pry(main)> board.valid_coordinate?("E1")
       # # => false
       
-      expect(@board.valid_coordinate("A22")).to eq(false)
+      expect(@board.valid_coordinate?("A22")).to eq(false)
       # pry(main)> board.valid_coordinate?("A22")
       # # => false
     end
@@ -56,54 +56,58 @@ RSpec.describe Board do
         
 
         # First, the number of coordinates in the array should be the same as the length of the ship:
-        
-        expect(@board.valid_placement?(cruiser, ["A1", "A2"])).to eq(false)
-        # pry(main)> board.valid_placement?(cruiser, ["A1", "A2"])
-        # # => false
-        
-        expect(@board.valid_placement?(submarine, ["A2", "A3", "A4"])).to eq(false)
-        # pry(main)> board.valid_placement?(submarine, ["A2", "A3", "A4"])
-        # # => false
 
-        # Next, make sure the coordinates are consecutive:
+        describe "coordinates given match ship length" do
+          expect(@board.valid_placement?(@cruiser, ["A1", "A2"])).to eq(false)
+          # pry(main)> board.valid_placement?(cruiser, ["A1", "A2"])
+          # # => false
+          
+          expect(@board.valid_placement?(@submarine, ["A2", "A3", "A4"])).to eq(false)
+          # pry(main)> board.valid_placement?(submarine, ["A2", "A3", "A4"])
+          # # => false
+        end
+
+        describe "coordinates passed are consecutive on board" do
+          expect(@board.valid_placement?(@cruiser, ["A1", "A2", "A4"])).to eq(false)
+          # pry(main)> board.valid_placement?(cruiser, ["A1", "A2", "A4"])
+          # # => false
+          
+          expect(@board.valid_placement?(@submarine, ["A1", "C1"])).to eq(false)
+          # pry(main)> board.valid_placement?(submarine, ["A1", "C1"])
+          # # => false
+        end
+
+        describe "coordinates must be selected in order" do
+          expect(@board.valid_placement?(@cruiser, ["A3", "A2", "A1"])).to eq(false)
+          # pry(main)> board.valid_placement?(cruiser, ["A3", "A2", "A1"])
+          # # => false
         
-        expect(@board.valid_placement?(cruiser, ["A1", "A2", "A4"])).to eq(false)
-        # pry(main)> board.valid_placement?(cruiser, ["A1", "A2", "A4"])
-        # # => false
-        
-        expect(@board.valid_placement?(submarine, ["A1", "C1"])).to eq(false)
-        # pry(main)> board.valid_placement?(submarine, ["A1", "C1"])
-        # # => false
-        
-        expect(@board.valid_placement?(cruiser, ["A3", "A2", "A1"])).to eq(false)
-        # pry(main)> board.valid_placement?(cruiser, ["A3", "A2", "A1"])
-        # # => false
-        
-        expect(@board.valid_placement?(submarine, ["C1", "B1"])).to eq(false)
-        # pry(main)> board.valid_placement?(submarine, ["C1", "B1"])
-        # # => false
-        # Finally, coordinates can’t be diagonal:
-        
-        expect(@board.valid_placement?(cruiser, ["A1", "B2", "C3"])).to eq(false)
-        # pry(main)> board.valid_placement?(cruiser, ["A1", "B2", "C3"])
-        # # => false
-        
-        expect(@board.valid_placement?(submarine, ["C2", "D3"])).to eq(false)
-        # pry(main)> board.valid_placement?(submarine, ["C2", "D3"])
-        # # => false
-        # If all the previous checks pass then the placement should be valid:
-        
-        expect(@board.valid_placement?(submarine, ["A1", "A2"])).to eq(true)
-        # pry(main)> board.valid_placement?(submarine, ["A1", "A2"])
-        # # => true
-        
-        expect(@board.valid_placement?(cruiser, ["B1", "C1", "D1"])).to eq(true)
-        # pry(main)> board.valid_placement?(cruiser, ["B1", "C1", "D1"])
-        # # => true
-        
-        # Note that all of the different cases listed above should be their own tests. 
-        # This will help you break this problem down into small steps and working on them 
-        # one at a time. You should not have one big test for validating placement.
+          expect(@board.valid_placement?(@submarine, ["C1", "B1"])).to eq(false)
+          # pry(main)> board.valid_placement?(submarine, ["C1", "B1"])
+          # # => false
+        end
+
+        describe "coordinates cannot be diagonally oriented" do
+          ### COORDINATES CANNOT BE DIAGONAL (MUST BE EITHER HORIZONTAL OR VERTICAL)
+          expect(@board.valid_placement?(@cruiser, ["A1", "B2", "C3"])).to eq(false)
+          # pry(main)> board.valid_placement?(cruiser, ["A1", "B2", "C3"])
+          # # => false
+          
+          expect(@board.valid_placement?(@submarine, ["C2", "D3"])).to eq(false)
+          # pry(main)> board.valid_placement?(submarine, ["C2", "D3"])
+          # # => false
+        end
+
+        describe "board can place ships with valid coordinates" do
+          # If all the previous checks pass then the placement should be valid:
+          expect(@board.valid_placement?(@submarine, ["A1", "A2"])).to eq(true)
+          # pry(main)> board.valid_placement?(submarine, ["A1", "A2"])
+          # # => true
+          
+          expect(@board.valid_placement?(@cruiser, ["B1", "C1", "D1"])).to eq(true)
+          # pry(main)> board.valid_placement?(cruiser, ["B1", "C1", "D1"])
+          # # => true
+        end
       end
     end
   end
