@@ -38,7 +38,6 @@ class Board
         # (meaning: the coordinates were valid)
       end
     end
-
     
     def consecutive_coordinates?(placement)
       row = placement.map{|cell| cell[0]}
@@ -62,6 +61,7 @@ class Board
       end
     end
 
+    # Board does not reveal User's ships by default - must be passed as argument to override
     def render(reveal = false)
       if reveal == true
         "  1 2 3 4 \n" \
@@ -78,6 +78,4 @@ class Board
       "D #{@cells["D1"].render} #{@cells["D2"].render} #{@cells["D3"].render} #{@cells["D4"].render} \n" 
       end
     end
-
-    
 end
