@@ -22,16 +22,20 @@ class Board
       }
     end
 
-    def valid_coordinate?(coordinate)
-      @cells.has_key?(coordinate)
+    def valid_coordinate?(coordinate) # Cannot be valid placement unless empty
+      @cells.has_key?(coordinate) && @cells[coordinate].empty?
     end
 
     def valid_placement?(ship, placement)
-      # require 'pry'; binding.pry
+      # This says: "If any coords passed in `placement` aren't valid  OR          are NOT consecutive         OR do not match ship length..."
       if !placement.all? {|coordinate| valid_coordinate?(coordinate)} || !consecutive_coordinates?(placement) || ship.length != placement.length
+      # --> return false
       false
+      # Otherwise:
       else
-      true
+        # --> return true 
+        true
+        # (meaning: the coordinates were valid)
       end
     end
 
