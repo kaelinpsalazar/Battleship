@@ -26,8 +26,6 @@ class Board
       @cells.has_key?(coordinate)
     end
 
-    
-    
     def valid_placement?(ship, placement)
       # require 'pry'; binding.pry
       if !placement.all? {|coordinate| valid_coordinate?(coordinate)} || !consecutive_coordinates?(placement) || ship.length != placement.length
@@ -35,8 +33,6 @@ class Board
       else
       true
       end
-  
-      
     end
 
     
@@ -46,19 +42,11 @@ class Board
       
       if col.uniq.length == 1
         consecutive_row = row.each_cons(2).all? { |a, b| b == a.next }
-
       elsif row.uniq.length == 1
         consecutive_col = col.each_cons(2).all? { |a, b| b == a.next }
       else
         false
-
-
       end
-
-
-    
-      
-
     end
 
     
