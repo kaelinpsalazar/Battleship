@@ -63,11 +63,25 @@ RSpec.describe Board do
   describe "overlapping ships" do
     it "prevents two ships placed from occupying the same cell" do
       @board.place(@cruiser, ["A1", "A2", "A3"])
-      # pry(main)> board.place(cruiser, ["A1", "A2", "A3"])
 
       expect(@board.valid_placement?(@submarine, ["A1", "B1"])).to eq(false)
-      # pry(main)> board.valid_placement?(submarine, ["A1", "B1"])
-      # # => false
+    end
+  end
+
+  describe "rendering gameboard" do
+    it "can render the board successfully" do
+      @board.place(@cruiser, ["A1", "A2", "A3"]) 
+      # pry(main)> board.place(cruiser, ["A1", "A2", "A3"])    
+
+      expect(@board.render).to eq("  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n")
+      # pry(main)> board.render
+      # # => "  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n"
+
+      @board.render(true)
+
+      expect(@board.render(true)).to eq("  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n")
+      # pry(main)> board.render(true)
+      # # => "  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n"
     end
   end
 end
