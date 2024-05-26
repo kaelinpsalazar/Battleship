@@ -26,34 +26,38 @@ class Board
       @cells.has_key?(coordinate)
     end
 
+    
+    
     def valid_placement?(ship, placement)
-      # 1. Ensure individual coordinates are valid with #valid_coordinate? (on board)
-      # Use #valid_coordinate? to enumerate over coord elements in `placement`
-      return false unless placement.all? {|coordinate| valid_coordinate?(coordinate)}
-      # 2. Ensure # of coordinates passed match ship length
-      return false unless placement.length == ship.length
+      # require 'pry'; binding.pry
+      if !placement.all? {|coordinate| valid_coordinate?(coordinate)} || !consecutive_coordinates?(placement) || ship.length != placement.length
+      false
+      else
+      true
+      end
+  
       
-      return false unless consecutive_coordinates?(placement)
-      # 3. Ensure coordinates passed via `placement` are consecutive
-      def consecutive_coordinates?(placement)
-        row = placement.map{|cell| cell[0]}
-        col = placement.map{|cell| cell[1]}
+    end
+
+    
+    def consecutive_coordinates?(placement)
+      row = placement.map{|cell| cell[0]}
+      col = placement.map{|cell| cell[1]}
+      
+      if col.uniq.length == 1
         consecutive_row = row.each_cons(2).all? { |a, b| b == a.next }
-        #each_cons(2) is used to iterate over consecutive pairs of elements.in ["1", "2", "3"]. "1" would be a and "2" would be b. we are making sure that b the next element after element a(b == a.next). 
+
+      elsif row.uniq.length == 1
         consecutive_col = col.each_cons(2).all? { |a, b| b == a.next }
-  
-        consecutive_row || consecutive_col
-        #we then use this logical operator to make sure that at least one of the two arguments is true
-  
+      else
+        false
+
+
       end
 
 
-      # 4. Ensure coordinates get passed in alphanumeric order
+    
       
-
-
-
-      # 5. Ensure coordinates passed are NOT diagonally oriented
 
     end
 
