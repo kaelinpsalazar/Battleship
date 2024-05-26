@@ -71,17 +71,13 @@ RSpec.describe Board do
   describe "rendering gameboard" do
     it "can render the board successfully" do
       @board.place(@cruiser, ["A1", "A2", "A3"]) 
-      # pry(main)> board.place(cruiser, ["A1", "A2", "A3"])    
 
+      # Shows blank gameboard
       expect(@board.render).to eq("  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n")
-      # pry(main)> board.render
-      # # => "  1 2 3 4 \nA . . . . \nB . . . . \nC . . . . \nD . . . . \n"
-
-      @board.render(true)
-
+      # Shows User's ships only - not Computer
       expect(@board.render(true)).to eq("  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n")
-      # pry(main)> board.render(true)
-      # # => "  1 2 3 4 \nA S S S . \nB . . . . \nC . . . . \nD . . . . \n"
+    
+      # Will revisit to add more tests as more functionality is added
     end
   end
 end
