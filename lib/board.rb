@@ -49,5 +49,14 @@ class Board
       end
     end
 
+    # This enumerable iterates over arrays passed in via `cells`
+    # It places the ship object passed through `ship` into the cell objects stored
+      # in the instance of `board`
+    def place(ship, cells)
+      cells.each do |coordinate|
+        @cells[coordinate].place_ship(ship)
+      end
+    end
+
     
 end
