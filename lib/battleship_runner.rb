@@ -6,10 +6,17 @@ require_relative 'cell'
 class Battleship
 
   def initialize
+    @player_cruiser = Ship.new("Cruiser", 3)
+    @player_submarine = Ship.new("Submarine", 2)
     @player_board = Board.new
+    @computer_cruiser = Ship.new("Cruiser", 3)
+    @computer_submarine = Ship.new("Submarine", 2)
     @computer_board = Board.new
-    @player_ships = []
-    @computer_ships = []
+    @player_ships = [@player_cruiser, @player_submarine]
+    @computer_ships = [@computer_cruiser, @computer_submarine]
+    @cells = ["A1", "A2", "A3", "A4", "B1", "B2", "B3","B4",
+              "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4"]
+    
   end
 
   def run
@@ -37,48 +44,48 @@ class Battleship
 
 
   def setup_game
-    cruiser = Ship.new("Cruiser", 3)
-    submarine = Ship.new("Submarine", 2)
-    @computer_ships = computer_ship_placement(cruiser, submarine)
-    p "I have laid out my ships on the grid."
-    p "You now need to lay out your two ships."
-    p "The Cruiser is three units long and the Submarine is two units long."
+    computer_ship_placement(@computer_cruiser, @computer_submarine)
+    puts "I have laid out my ships on the grid."
+    puts "You now need to lay out your two ships."
+    puts "The Cruiser is three units long and the Submarine is two units long."
     place_player_ships
   end
 
-  def computer_ship_placement(cruiser, submarine)
-    cruiser_coordinates = generate_random_coordinates(cruiser.length)
-    submarine_coordinates = generate_random_coordinates(submarine.length)
-
-    @computer_board.place(cruiser, cruiser_coordinates)
-    @computer_board.place(submarine, submarine_coordinates)
-
+  def computer_ship_placement(computer_cruiser, computer_submarine)
+    cruiser_coordinates = generate_random_coordinates(@computer_cruiser, @computer_cruiser.length)
+    submarine_coordinates = generate_random_coordinates(@computer_submarine, @computer_submarine.length)
+  
+    @computer_board.place(@computer_cruiser, cruiser_coordinates)
+    @computer_board.place(@computer_submarine, submarine_coordinates)
   end
 
-  def generate_random_coordinates(length)
-    # Generate a random starting point (row, column)
-    row = ('A'..'D').to_a.sample
-    column = rand(1..4)
-  
-    # Generate a random orientation (horizontal or vertical)
-    orientation = rand(2) == 0 ? :horizontal : :vertical
-  
-    # Return an array of coordinates based on the starting point and orientation
-    if orientation == :horizontal
-      coordinates = []
-      length.times { |i| coordinates << [row, column + i] }
-    else
-      coordinates = []
-      length.times { |i| coordinates << [(row.ord + i).chr, column] }
+  def generate_random_coordinates(ship, length)
+    loop do
+      coordinates = @cells.sample(length)
+      return coordinates if @computer_board.valid_placement?(ship, coordinates)
     end
-  
-    coordinates
   end
 
 
   def place_player_ships
+    puts "Enter the coordinates for your Cruiser (3 cells):"
+    cruiser_coordinates = gets.chomp.upcase.split
+    while !@player_board.valid_placement?(@player_cruiser, cruiser_coordinates)
+      puts "Invalid coordinates. Please try again:"
+      cruiser_coordinates = gets.chomp.upcase.split
+    end
+    @player_board.place(@player_cruiser, cruiser_coordinates)
   
+    puts "Enter the coordinates for your Submarine (2 cells):"
+    submarine_coordinates = gets.chomp.upcase.split
+    while !@player_board.valid_placement?(@player_submarine, submarine_coordinates)
+      puts "Invalid coordinates. Please try again:"
+      submarine_coordinates = gets.chomp.upcase.split
+    end
+    @player_board.place(@player_submarine, submarine_coordinates)
   end
+  
+
 
   def play_game
 
@@ -93,8 +100,6 @@ class Battleship
   # end
 
   def game_ends?
-
-    player_ships_sunk? || computer_ships_sunk?
 
   end
 end
