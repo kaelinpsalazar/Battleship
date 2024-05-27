@@ -21,7 +21,8 @@ class Cell
 
   def fire_upon
     @fired_upon = true
-    @ship.hit if @ship
+    @ship.hit if @ship  # <-- Does this mean "Call the `hit` method on the `ship` attribute if `@ship` == true?"
+                          # Is that how you'd word that?  Just trying to understand all of our code 100%
   end
 
   def fired_upon?
