@@ -29,12 +29,16 @@ class Battleship
   end
 
   def main_menu
-    puts "Enter 'p to play. Enter 'q' to quit."
+    puts "Enter 'p' to play. Enter 'q' to quit."
     choice = gets.chomp.downcase
     case choice
     when 'p'
       setup_game
-      play_game
+      loop do
+        display_boards
+        player_shot
+        computer_shot
+      end
     when 'q'
       exit
     else 
@@ -84,23 +88,37 @@ class Battleship
     end
     @player_board.place(@player_submarine, submarine_coordinates)
   end
-  
 
-
-  def play_game
-
+  def display_boards
+    puts "=============COMPUTER BOARD============="
+    puts @computer_board.render
+    puts "==============PLAYER BOARD=============="
+    puts @player_board.render(true)
   end
 
-  # def player_turn
+  def player_shot
+    puts "Enter the coordinate for your shot:"
+    coordinate = gets.chomp.upcase
+    until @computer_board.valid_coordinate?(coordinate) && !@computer_board.cells[coordinate].fired_upon?
+      puts "Invalid coordinate. Please enter a valid coordinate:"
+      coordinate = gets.chomp.upcase
+    end
+    @computer_board.cells[coordinate].fire_upon
+    result = @computer_board.cells[coordinate].render
+    puts "Your shot on #{coordinate} was #{result}."
+  end
 
-  # end
+  def computer_shot
+    coordinate = @cells.sample
+    coordinate = @cells.sample until !@player_board.cells[coordinate].fired_upon?
+    @player_board.cells[coordinate].fire_upon
+    result = @player_board.cells[coordinate].render
+    puts "My shot on #{coordinate} was #{result}."
+  end
 
-  # def computer_turn
-
-  # end
 
   def game_ends?
-
+    @player_ships.all?(&:sunk?) || @computer_ships.all?(&:sunk?)
   end
 end
 
