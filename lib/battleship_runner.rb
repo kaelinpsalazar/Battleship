@@ -55,9 +55,26 @@ class Battleship
 
   end
 
-  def generate_random_coordinates
-
+  def generate_random_coordinates(length)
+    # Generate a random starting point (row, column)
+    row = ('A'..'D').to_a.sample
+    column = rand(1..4)
+  
+    # Generate a random orientation (horizontal or vertical)
+    orientation = rand(2) == 0 ? :horizontal : :vertical
+  
+    # Return an array of coordinates based on the starting point and orientation
+    if orientation == :horizontal
+      coordinates = []
+      length.times { |i| coordinates << [row, column + i] }
+    else
+      coordinates = []
+      length.times { |i| coordinates << [(row.ord + i).chr, column] }
+    end
+  
+    coordinates
   end
+
 
   def place_player_ships
   
