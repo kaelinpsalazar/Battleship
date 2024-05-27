@@ -27,16 +27,15 @@ class Board
     end
 
     def valid_placement?(ship, placement)
-      # This says: 
-      #     "If any coords passed into `placement` aren't valid       OR          are NOT consecutive         OR do not match ship length..."
+      # This says: "If any coords passed in `placement` aren't valid  OR          are NOT consecutive         OR do not match ship length..."
       if !placement.all? {|coordinate| valid_coordinate?(coordinate)} || !consecutive_coordinates?(placement) || ship.length != placement.length
-      # If ANY of these 3 statements returns true --> return false
+      # --> return false
       false
       # Otherwise:
       else
         # --> return true 
         true
-        # (meaning: the coordinates passed in were valid cell locations, were consecutively placed, AND match the length of the ship object passed in.
+        # (meaning: the coordinates were valid)
       end
     end
     
@@ -59,13 +58,12 @@ class Board
       def place(ship, cells)
         cells.each do |coordinate|
           if @cells[coordinate].nil?
-            puts "ERROR: Cell at coordinate #{coordinate} is nil!"
+            puts "Error: Cell at coordinate #{coordinate} is nil!"
           else
             @cells[coordinate].place_ship(ship)
           end
         end
       end
-      
 
     # Board does not reveal User's ships by default - must be passed as argument to override
     def render(reveal = false)
