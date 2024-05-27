@@ -10,12 +10,8 @@ class Battleship
     @computer_board = Board.new
     @player_ships = []
     @computer_ships = []
-    #initialize game components
-
   end
 
-
-  
   def run
     puts "Welcome to BATTLESHIP"
     loop do
@@ -36,35 +32,54 @@ class Battleship
       exit
     else 
       puts "You were ordered to enter 'p' or 'q' soldier. GET TO IT!"
-    end
-    
+    end  
   end
 
 
   def setup_game
-    @computer_ships = computer_ship_placement
+    cruiser = Ship.new("Cruiser", 3)
+    submarine = Ship.new("Submarine", 2)
+    @computer_ships = computer_ship_placement(cruiser, submarine)
     p "I have laid out my ships on the grid."
     p "You now need to lay out your two ships."
     p "The Cruiser is three units long and the Submarine is two units long."
     place_player_ships
+  end
+
+  def computer_ship_placement(cruiser, submarine)
+    cruiser_coordinates = generate_random_coordinates(cruiser.length)
+    submarine_coordinates = generate_random_coordinates(submarine.length)
+
+    @computer_board.place(cruiser, cruiser_coordinates)
+    @computer_board.place(submarine, submarine_coordinates)
 
   end
 
-  def computer_ship_placement
+  def generate_random_coordinates
 
   end
 
-  def player_ship_placement
-
+  def place_player_ships
+  
   end
 
   def play_game
 
   end
 
-  
+  # def player_turn
 
+  # end
 
+  # def computer_turn
+
+  # end
+
+  def game_ends?
+
+    player_ships_sunk? || computer_ships_sunk?
+
+  end
 end
 
 
