@@ -56,11 +56,16 @@ class Board
     # This enumerable iterates over arrays passed in via `cells`
     # It places the ship object passed through `ship` into the cell objects stored
       # in the instance of `board`
-    def place(ship, cells)
-      cells.each do |coordinate|
-        @cells[coordinate].place_ship(ship)
+      def place(ship, cells)
+        cells.each do |coordinate|
+          if @cells[coordinate].nil?
+            puts "ERROR: Cell at coordinate #{coordinate} is nil!"
+          else
+            @cells[coordinate].place_ship(ship)
+          end
+        end
       end
-    end
+      
 
     # Board does not reveal User's ships by default - must be passed as argument to override
     def render(reveal = false)
