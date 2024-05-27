@@ -21,15 +21,14 @@ class Cell
 
   def fire_upon
     @fired_upon = true
-    @ship.hit if @ship  # <-- Does this mean "Call the `hit` method on the `ship` attribute if `@ship` == true?"
-                          # Is that how you'd word that?  Just trying to understand all of our code 100%
+    @ship.hit if @ship
   end
 
   def fired_upon?
     @fired_upon
   end
 
-  def render(reveal_ship = false)
+  def render(reveal = false)
     if !empty? && fired_upon? && @ship.sunk?
       "X"
       # “X” if the cell has been fired upon and its ship has been sunk.
@@ -39,7 +38,7 @@ class Cell
     elsif empty? && fired_upon
       "M"
       # “M” if the cell has been fired upon and it does not contain a ship (the shot was a miss).
-    elsif reveal_ship && !empty?
+    elsif reveal && !empty?
       "S"
       # Additionally, we will include an optional boolean argument to indicate 
       # if we want to reveal a ship in the cell even if it has not been fired upon. 
