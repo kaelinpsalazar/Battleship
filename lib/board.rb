@@ -72,14 +72,6 @@ class Board
       end
     end
 
-    ### This is an option, but I think it makes more sense to check `empty?` in `valid_placement?`
-    # def place(ship, cells)
-    #   if cells.any? { |coordinate| !@cells[coordinate].empty? }
-    #     puts "Error: One or more cells are already occupied!"
-    #     return false
-    #   end
-
-
     # Board does not reveal User's ships by default - must be passed as argument to override
     def render(reveal = false)
       if reveal == true
@@ -97,4 +89,15 @@ class Board
       "D #{@cells["D1"].render} #{@cells["D2"].render} #{@cells["D3"].render} #{@cells["D4"].render} \n" 
       end
     end
+
+    # `all_sunk?` first makes an array of all the non-empty cells (contain ships)
+      # Then checks the sunk status on each non-empty cell
+        # Returns `true` if all non-empty cells are "sunk"
+    # def all_sunk?
+    #   @cells.values.select do |cell|
+    #     !cell.empty?
+    #   end.all? do |cell|
+    #     cell.ship.sunk?
+    #   end
+    # end
 end

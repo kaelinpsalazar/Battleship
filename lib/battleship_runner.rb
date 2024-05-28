@@ -12,9 +12,9 @@ class Battleship
     @computer_cruiser = Ship.new("Cruiser", 3)
     @computer_submarine = Ship.new("Submarine", 2)
     @computer_board = Board.new
-    @player_ships = [@player_cruiser, @player_submarine]
-    @computer_ships = [@computer_cruiser, @computer_submarine]
-    @cells = ["A1", "A2", "A3", "A4", "B1", "B2", "B3","B4",
+    @player_ships = [@player_cruiser, @player_submarine]        # can we remove these
+    @computer_ships = [@computer_cruiser, @computer_submarine]  # can we remove these
+    @cells = ["A1", "A2", "A3", "A4", "B1", "B2", "B3","B4",    # can we simplify this with hash notation refer
               "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4"]
     
   end
@@ -34,6 +34,7 @@ class Battleship
     case choice
     when 'p'
       setup_game
+      # until @computer_board
       loop do   # Are we using `play_game` here instead?
         display_boards
         player_shot
@@ -129,7 +130,7 @@ class Battleship
                   when "X" then "a sunk ship!"
                   else "Something has gone wrong"
                   end
-    puts "Your shot on #{shot} was #{result}."
+    puts "Your shot on #{shot} was #{shot_result}."  # This could be a helper method for both players
   end
 
   def computer_shot
@@ -143,7 +144,7 @@ class Battleship
 
 
   def game_ends?
-
+    @player_ships.all?(&:sunk?) || @computer_ships.all?(&:sunk?)
   end
 end
 
