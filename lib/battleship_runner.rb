@@ -192,7 +192,7 @@ class Battleship
   def game_ends?
     # @player_ships.all?(&:sunk?) || @computer_ships.all?(&:sunk?)
     if @player_ships.all?(&:sunk?)
-      puts "You return home in disgrace."
+      p "You return home in disgrace."
       return true
 
     elsif @computer_ships.all?(&:sunk?)
