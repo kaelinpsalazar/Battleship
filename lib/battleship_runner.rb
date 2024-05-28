@@ -14,9 +14,9 @@ class Battleship
     @computer_board = Board.new
     @player_ships = [@player_cruiser, @player_submarine]        # can we remove these
     @computer_ships = [@computer_cruiser, @computer_submarine]  # can we remove these
-    @cells = ["A1", "A2", "A3", "A4", "B1", "B2", "B3","B4",    # can we simplify this with hash notation refer
-              "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4"]
-    
+    # @cells = ["A1", "A2", "A3", "A4", "B1", "B2", "B3","B4",    # can we simplify this with hash notation refer
+    #           "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4"]
+    @cells = @computer_board.cells.keys
   end
 
   def run
@@ -96,19 +96,19 @@ class Battleship
 
 
   def place_player_ships
-    puts "Enter the coordinates for your Cruiser (3 cells):"
-    cruiser_coordinates = gets.chomp.upcase.split
+    puts "Enter 3 coordinates for your Cruiser.\n*** (For example: A1 A2 A3) ***"
+    cruiser_coordinates = gets.chomp.upcase.split(" ").sort
     while !@player_board.valid_placement?(@player_cruiser, cruiser_coordinates)
       puts "Invalid coordinates. Please try again:"
-      cruiser_coordinates = gets.chomp.upcase.split
+      cruiser_coordinates = gets.chomp.upcase.split(" ").sort
     end
     @player_board.place(@player_cruiser, cruiser_coordinates)
   
-    puts "Enter the coordinates for your Submarine (2 cells):"
-    submarine_coordinates = gets.chomp.upcase.split
+    puts "Enter the coordinates for your Submarine.\n*** (For example: C3 C4) ***"
+    submarine_coordinates = gets.chomp.upcase.split(" ").sort
     while !@player_board.valid_placement?(@player_submarine, submarine_coordinates)
       puts "Invalid coordinates. Please try again:"
-      submarine_coordinates = gets.chomp.upcase.split
+      submarine_coordinates = gets.chomp.upcase.split(" ").sort
     end
     @player_board.place(@player_submarine, submarine_coordinates)
   end
@@ -120,24 +120,6 @@ class Battleship
     puts @player_board.render(true)
   end
 
-
-  ### BUG ###
-  # Returning `invalid coordinate` when actually a hit - FIXED
-
-  # def player_shot
-  #   puts "Enter the coordinate for your shot:"
-  #   coordinate = gets.chomp.upcase
-  #   # until input coords = valid board coords           &                     
-  #   until @computer_board.valid_coordinate?(coordinate) && !@computer_board.cells[coordinate].fired_upon?
-  #     puts "Invalid coordinate. Please enter a valid coordinate:"
-  #     coordinate = gets.chomp.upcase
-  #   end
-  #   @computer_board.cells[coordinate].fire_upon
-  #   result = @computer_board.cells[coordinate].render
-  #   puts "Your shot on #{coordinate} was #{result}."
-  # end
-
-
   def player_shot
     puts "Enter the coordinate for your shot:"
     shot = gets.chomp.upcase
@@ -148,44 +130,50 @@ class Battleship
     @computer_board.cells[shot].fire_upon
     result = @computer_board.cells[shot].render
     shot_result = case result
-                  when "H" then "a hit!"
-                  when "M" then "a miss"
-                  when "X" then "a sunk ship!"
+                  when "H" then "was a hit!"
+                  when "M" then "was a miss"
+                  when "X" then "sunk a ship!"
                   else "Something has gone wrong"
                   end
-    puts "Your shot on #{shot} was #{shot_result}."  # This could be a helper method for both players
+    puts "Your shot on #{shot} #{shot_result}."  
   end
 
+# This could be a helper method for both players
+  
   def computer_shot
-    # Check if cell empty before firing
-    coordinate = @cells.sample
-    coordinate = @cells.sample until !@player_board.cells[coordinate].fired_upon?
-    @player_board.cells[coordinate].fire_upon
-    result = @player_board.cells[coordinate].render
-    puts "My shot on #{coordinate} was #{result}."
+    shot = @cells.sample
+    shot = @cells.sample until !@player_board.cells[shot].fired_upon?
+    @player_board.cells[shot].fire_upon
+    result = @player_board.cells[shot].render
+    shot_result = case result
+                  when "H" then "was a hit!"
+                  when "M" then "was a miss"
+                  when "X" then "sunk a ship!"
+                  else "Something has gone wrong"
+                  end
+    puts "My shot on #{shot} #{shot_result}."
   end
 
 
+  # def player_shot
+  #   puts "Enter the coordinate for your shot:"
+  #   coordinate = gets.chomp.upcase
+  #   until @computer_board.valid_coordinate?(coordinate) && !@computer_board.cells[coordinate].fired_upon?
+  #     puts "Invalid coordinate. Please enter a valid coordinate:"
+  #     coordinate = gets.chomp.upcase
+  #   end
+  #   @computer_board.cells[coordinate].fire_upon
+  #   result = @computer_board.cells[coordinate].render
+  #   puts "Your shot on #{coordinate} was #{result}."
+  # end
 
-  def player_shot
-    puts "Enter the coordinate for your shot:"
-    coordinate = gets.chomp.upcase
-    until @computer_board.valid_coordinate?(coordinate) && !@computer_board.cells[coordinate].fired_upon?
-      puts "Invalid coordinate. Please enter a valid coordinate:"
-      coordinate = gets.chomp.upcase
-    end
-    @computer_board.cells[coordinate].fire_upon
-    result = @computer_board.cells[coordinate].render
-    puts "Your shot on #{coordinate} was #{result}."
-  end
-
-  def computer_shot
-    coordinate = @cells.sample
-    coordinate = @cells.sample until !@player_board.cells[coordinate].fired_upon?
-    @player_board.cells[coordinate].fire_upon
-    result = @player_board.cells[coordinate].render
-    puts "My shot on #{coordinate} was #{result}."
-  end
+  # def computer_shot
+  #   coordinate = @cells.sample
+  #   coordinate = @cells.sample until !@player_board.cells[coordinate].fired_upon?
+  #   @player_board.cells[coordinate].fire_upon
+  #   result = @player_board.cells[coordinate].render
+  #   puts "My shot on #{coordinate} was #{result}."
+  # end
 
 
 
@@ -202,7 +190,6 @@ class Battleship
     else 
       return false
     
-
     end
   end
 end
