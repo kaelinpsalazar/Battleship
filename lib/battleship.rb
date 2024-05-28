@@ -12,10 +12,8 @@ class Battleship
     @computer_cruiser = Ship.new("Cruiser", 3)
     @computer_submarine = Ship.new("Submarine", 2)
     @computer_board = Board.new
-    @player_ships = [@player_cruiser, @player_submarine]        # can we remove these
-    @computer_ships = [@computer_cruiser, @computer_submarine]  # can we remove these
-    # @cells = ["A1", "A2", "A3", "A4", "B1", "B2", "B3","B4",    # can we simplify this with hash notation refer
-    #           "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4"]
+    @player_ships = [@player_cruiser, @player_submarine]        # can we remove these?
+    @computer_ships = [@computer_cruiser, @computer_submarine]  # can we remove these?
     @cells = @computer_board.cells.keys
   end
 
@@ -34,9 +32,7 @@ class Battleship
     case choice
     when 'p'
       setup_game
-
       play_game until game_ends?
-      
     when 'q'
       exit
     else 
@@ -46,14 +42,12 @@ class Battleship
   end
 
   def play_game
-    loop do   # Are we using `play_game` here instead?
+    loop do
       display_boards
       player_shot
       break if game_ends?
       computer_shot
       break if game_ends?
-      # Need to exit shot exchange loop with #game_ends? here
-
     end
     if game_ends? 
 
@@ -69,7 +63,6 @@ class Battleship
       end
     end
   end
-
 
   def setup_game
     computer_ship_placement(@computer_cruiser, @computer_submarine)
@@ -93,7 +86,6 @@ class Battleship
       return coordinates if @computer_board.valid_placement?(ship, coordinates)
     end
   end
-
 
   def place_player_ships
     puts "Enter 3 coordinates for your Cruiser.\n*** (For example: A1 A2 A3) ***"
@@ -155,41 +147,18 @@ class Battleship
   end
 
 
-  # def player_shot
-  #   puts "Enter the coordinate for your shot:"
-  #   coordinate = gets.chomp.upcase
-  #   until @computer_board.valid_coordinate?(coordinate) && !@computer_board.cells[coordinate].fired_upon?
-  #     puts "Invalid coordinate. Please enter a valid coordinate:"
-  #     coordinate = gets.chomp.upcase
-  #   end
-  #   @computer_board.cells[coordinate].fire_upon
-  #   result = @computer_board.cells[coordinate].render
-  #   puts "Your shot on #{coordinate} was #{result}."
-  # end
-
-  # def computer_shot
-  #   coordinate = @cells.sample
-  #   coordinate = @cells.sample until !@player_board.cells[coordinate].fired_upon?
-  #   @player_board.cells[coordinate].fire_upon
-  #   result = @player_board.cells[coordinate].render
-  #   puts "My shot on #{coordinate} was #{result}."
-  # end
-
-
-
+  #### THESE MESSAGES ARE GETTING CALLED TWICE. I CAN'T FIGURE OUT HOW TO FIX IT WITHOUT SCREWING UP
+  #### THE CPU PLACING THEIR SUBMARINE.
   def game_ends?
     # @player_ships.all?(&:sunk?) || @computer_ships.all?(&:sunk?)
     if @player_ships.all?(&:sunk?)
       p "You return home in disgrace."
       return true
-
     elsif @computer_ships.all?(&:sunk?)
       p "You have eleminated the enemy scum. Proceed with honor."
       return true
-
     else 
       return false
-    
     end
   end
 end

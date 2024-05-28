@@ -89,15 +89,4 @@ class Board
       "D #{@cells["D1"].render} #{@cells["D2"].render} #{@cells["D3"].render} #{@cells["D4"].render} \n" 
       end
     end
-
-    # `all_sunk?` first makes an array of all the non-empty cells (contain ships)
-      # Then checks the sunk status on each non-empty cell
-        # Returns `true` if all non-empty cells are "sunk"
-    # def all_sunk?
-    #   @cells.values.select do |cell|
-    #     !cell.empty?
-    #   end.all? do |cell|
-    #     cell.ship.sunk?
-    #   end
-    # end
 end
