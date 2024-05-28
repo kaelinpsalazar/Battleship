@@ -22,13 +22,20 @@ class Board
       }
     end
 
-    def valid_coordinate?(coordinate) # Cannot be valid placement unless empty
-      @cells.has_key?(coordinate) && @cells[coordinate].empty?
+    def valid_coordinate?(coordinate)
+      @cells.has_key?(coordinate) 
     end
 
     def valid_placement?(ship, placement)
-      # This says: "If any coords passed in `placement` aren't valid  OR          are NOT consecutive         OR do not match ship length..."
-      if !placement.all? {|coordinate| valid_coordinate?(coordinate)} || !consecutive_coordinates?(placement) || ship.length != placement.length
+      # This says: 
+      # "If any coords passed in `placement` are NOT valid
+      if !placement.all? {|coordinate| valid_coordinate?(coordinate)} || 
+      # OR are NOT consecutive 
+      !consecutive_coordinates?(placement) ||
+      # OR do not match ship length
+      ship.length != placement.length ||
+      # OR selected cells are not empty
+      !placement.all? {|coordinate| @cells[coordinate].empty?}
       # --> return false
       false
       # Otherwise:
@@ -39,7 +46,7 @@ class Board
       end
     end
     
-    def consecutive_coordinates?(placement)
+    def consecutive_coordinates?(placement) # Do we need a test for this method?
       row = placement.map{|cell| cell[0]}
       col = placement.map{|cell| cell[1]}
       
@@ -55,15 +62,15 @@ class Board
     # This enumerable iterates over arrays passed in via `cells`
     # It places the ship object passed through `ship` into the cell objects stored
       # in the instance of `board`
-      def place(ship, cells)
-        cells.each do |coordinate|
-          if @cells[coordinate].nil?
-            puts "Error: Cell at coordinate #{coordinate} is nil!"
-          else
-            @cells[coordinate].place_ship(ship)
-          end
+    def place(ship, cells)
+      cells.each do |coordinate|
+        if @cells[coordinate].nil?
+          puts "Error: Cell at coordinate #{coordinate} is nil!" # Is this message necessary? 
+        else
+          @cells[coordinate].place_ship(ship)
         end
       end
+    end
 
     # Board does not reveal User's ships by default - must be passed as argument to override
     def render(reveal = false)
@@ -82,4 +89,15 @@ class Board
       "D #{@cells["D1"].render} #{@cells["D2"].render} #{@cells["D3"].render} #{@cells["D4"].render} \n" 
       end
     end
+
+    # `all_sunk?` first makes an array of all the non-empty cells (contain ships)
+      # Then checks the sunk status on each non-empty cell
+        # Returns `true` if all non-empty cells are "sunk"
+    # def all_sunk?
+    #   @cells.values.select do |cell|
+    #     !cell.empty?
+    #   end.all? do |cell|
+    #     cell.ship.sunk?
+    #   end
+    # end
 end
