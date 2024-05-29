@@ -49,18 +49,16 @@ class Battleship
       computer_shot
       break if game_ends?
     end
-    if game_ends? 
 
-      p "Final Battlefield"
-      display_boards
-      puts "Whether win or lose, we are all heroes. Play again? (Yes or No)"
-      choice = gets.chomp.downcase
-      case choice
-      when 'yes'
-        run
-      when 'no'
-        exit
-      end
+    p "Final Battlefield"
+    display_boards
+    puts "Whether win or lose, we are all heroes. Play again? (Yes or No)"
+    choice = gets.chomp.downcase
+    case choice
+    when 'yes'
+      run
+    when 'no'
+      exit
     end
   end
 
