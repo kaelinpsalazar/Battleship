@@ -4,6 +4,15 @@ require_relative 'cell'
 
 
 class Battleship
+  attr_reader :player_cruiser,
+              :player_submarine,
+              :player_board,
+              :computer_cruiser,
+              :computer_submarine,
+              :computer_board,
+              :player_ships,
+              :computer_ships,
+              :cells
 
   def initialize
     @player_cruiser = Ship.new("Cruiser", 3)
@@ -61,7 +70,6 @@ class Battleship
     choice = gets.chomp.downcase
     case choice
     when 'yes'
-      binding.pry
       self.run
     when 'no'
       exit
@@ -162,3 +170,6 @@ class Battleship
   end
 end
 
+# BUGS:
+# Computer incorrectly places ships occassionally (overlapping)
+# No garbage collection
