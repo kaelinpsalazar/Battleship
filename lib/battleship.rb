@@ -14,16 +14,20 @@ class Battleship
     @computer_board = Board.new
     @player_ships = [@player_cruiser, @player_submarine]        # can we remove these?
     @computer_ships = [@computer_cruiser, @computer_submarine]  # can we remove these?
-    @cells = @computer_board.cells.keys
+    @cells = ["A1", "A2", "A3", "A4", "B1", "B2", "B3","B4",
+    "C1", "C2", "C3", "C4", "D1", "D2", "D3", "D4"]
   end
 
   def run
     puts "Welcome to BATTLESHIP"
-    loop do
+    # loop do
       main_menu
-      break if game_ends || main_menu == 'q'
-    end
-      puts "Goodbye!"
+      # break if game_ends || main_menu == 'q'
+
+      # Does `self.run` reinstantiate the instance of Battleship?
+    #   self.run if game_ends? || main_menu == 'q'
+    # end
+      # puts "Goodbye!"
   end
 
   def main_menu
@@ -34,6 +38,7 @@ class Battleship
       setup_game
       play_game until game_ends?
     when 'q'
+      puts "Goodbye!"
       exit
     else 
       puts "You were ordered to enter 'p' or 'q' soldier. GET TO IT!"
@@ -56,21 +61,22 @@ class Battleship
     choice = gets.chomp.downcase
     case choice
     when 'yes'
-      run
+      binding.pry
+      self.run
     when 'no'
       exit
     end
   end
 
   def setup_game
-    computer_ship_placement(@computer_cruiser, @computer_submarine)
+    computer_ship_placement#(@computer_cruiser, @computer_submarine)
     puts "I have laid out my ships on the grid."
     puts "You now need to lay out your two ships."
     puts "The Cruiser is three units long and the Submarine is two units long."
     place_player_ships
   end
 
-  def computer_ship_placement(computer_cruiser, computer_submarine)
+  def computer_ship_placement#(computer_cruiser, computer_submarine)
     cruiser_coordinates = generate_random_coordinates(@computer_cruiser, @computer_cruiser.length)
     submarine_coordinates = generate_random_coordinates(@computer_submarine, @computer_submarine.length)
   
@@ -144,24 +150,15 @@ class Battleship
     puts "My shot on #{shot} #{shot_result}."
   end
 
-
-  #### THESE MESSAGES ARE GETTING CALLED TWICE. I CAN'T FIGURE OUT HOW TO FIX IT WITHOUT SCREWING UP
-  #### THE CPU PLACING THEIR SUBMARINE.
   def game_ends?
     # @player_ships.all?(&:sunk?) || @computer_ships.all?(&:sunk?)
     if @player_ships.all?(&:sunk?)
       p "You return home in disgrace."
-      return true
+      true
     elsif @computer_ships.all?(&:sunk?)
       p "You have eleminated the enemy scum. Proceed with honor."
-      return true
-    else 
-      return false
+      true
     end
   end
 end
-
-
-game = Battleship.new
-game.run
 

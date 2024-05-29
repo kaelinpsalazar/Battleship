@@ -29,21 +29,14 @@ class Board
     def valid_placement?(ship, placement)
       # This says: 
       # "If any coords passed in `placement` are NOT valid
-      if !placement.all? {|coordinate| valid_coordinate?(coordinate)} || 
+      placement.all? {|coordinate| valid_coordinate?(coordinate)} && 
       # OR are NOT consecutive 
-      !consecutive_coordinates?(placement) ||
+      consecutive_coordinates?(placement) &&
       # OR do not match ship length
-      ship.length != placement.length ||
+      ship.length == placement.length &&
       # OR selected cells are not empty
-      !placement.all? {|coordinate| @cells[coordinate].empty?}
+      placement.all? {|coordinate| @cells[coordinate].empty?}
       # --> return false
-      false
-      # Otherwise:
-      else
-        # --> return true 
-        true
-        # (meaning: the coordinates were valid)
-      end
     end
     
     def consecutive_coordinates?(placement) # Do we need a test for this method?
