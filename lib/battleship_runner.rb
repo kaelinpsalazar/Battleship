@@ -1,4 +1,4 @@
 require './spec/spec_helper'
 
 game = Battleship.new
-game.ru
+game.run
